@@ -1,0 +1,8 @@
+04-28 10:30:02.010 [main] [INFO] [org.springframework.boot.StartupInfoLogger.logStarting] - Starting BAA000Test on VM-185 with PID 8208 (D:\EclipseWorkSpace\card3.0\cap\target\test-classes started by eu0239 in D:\EclipseWorkSpace\card3.0\cap)
+04-28 10:30:02.026 [main] [INFO] [org.springframework.boot.SpringApplication.logStartupProfileInfo] - The following profiles are active: dev
+04-28 10:30:04.244 [main] [INFO] [com.wk.card.common.system.SystemInfo.init] - 初始化当前机器：System Info: feihl/cap@10.0.98.125@cap@feihl
+04-28 10:30:04.244 [main] [INFO] [com.wk.card.common.ResourceManager.init] - 初始化systemContext
+04-28 10:30:19.717 [main] [INFO] [org.springframework.boot.StartupInfoLogger.logStarting] - Starting BAA000Test on VM-185 with PID 8652 (D:\EclipseWorkSpace\card3.0\cap\target\test-classes started by eu0239 in D:\EclipseWorkSpace\card3.0\cap)
+04-28 10:30:19.733 [main] [INFO] [org.springframework.boot.SpringApplication.logStartupProfileInfo] - The following profiles are active: dev
+04-28 10:30:21.764 [main] [INFO] [com.wk.card.common.system.SystemInfo.init] - 初始化当前机器：System Info: feihl/cap@10.0.98.125@cap@feihl
+04-28 10:30:21.764 [main] [INFO] [com.wk.card.common.ResourceManager.init] - 初始化systemContext

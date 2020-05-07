@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    %d: 日期格式,默认yyyy-MM-dd hh:mm:ss,SSS,也可以%d{hh:mm:ss,SSS}
+    %p: ALL,TRACE, DEBUG, INFO, WARN, ERROR ,FATAL,OFF
+    %t: 线程名
+    %m: 信息
+    %n: 换行
+    %C=%class: class
+    %M=%method: 方法名
+    %F=%file : 文件
+    %l=%location:
+    %L=%line:行
+ -->
+<!-- 每monitorInterval秒检查1次配置文件是否有改变 -->
+<Configuration status="OFF" name="TasksConfig" monitorInterval="60">
+
+  <Appenders>
+    <Console name="consoleLog" target="SYSTEM_OUT">  
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] [%p] [%C.%M] %m%n"/>  
+    </Console>
+    <!-- 交易日志 -->
+    <RollingFile name="aip" fileName="./log/aip.log" filePattern="./log/bk/aip_%d{yyyy-MM-dd}_%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss.SSS} [%t] [%p] [%C.%M] %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        
+        <!-- 按时间间隔归档 (以文件名日期格式为单位)-->
+        <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+    
+        <!-- 日志达到size时归档 ,注意配置i%-->
+        <SizeBasedTriggeringPolicy size="500 MB"/> 
+        <DefaultRolloverStrategy max="9999"/>
+      </Policies>
+    </RollingFile>
+    
+    <!-- 系统日志 -->
+    <RollingFile name="system" fileName="./log/aip_system.log" filePattern="./log/bk/aip_system_%d{yyyy-MM-dd}_%i.log">
+      <PatternLayout>
+        <Pattern>%d{HH:mm:ss.SSS} [%t] [%p] [%C.%M] %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        
+        <!-- 按时间间隔归档 (以文件名日期格式为单位)-->
+        <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+    
+        <!-- 日志达到size时归档 ,注意配置i%-->
+        <SizeBasedTriggeringPolicy size="500 MB"/> 
+        <DefaultRolloverStrategy max="9999"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+        <Logger name="org.springframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Logger name="org.mybatis" level="DEBUG" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Logger name="io.netty" level="DEBUG" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+    <Root level="DEBUG">
+      <AppenderRef ref="consoleLog"/>
+    </Root>
+  </Loggers>
+  
+</Configuration>

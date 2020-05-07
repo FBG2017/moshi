@@ -1,0 +1,22 @@
+spring:
+    datasource:
+        name: test
+        url: jdbc:db2://10.0.130.101:60000/card:currentSchema=CARD3_PROD
+        username: cardad
+        password: cardad
+        driver-class-name: com.ibm.db2.jcc.DB2Driver
+    main:
+      allow-bean-definition-overriding: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+system: 
+#  ip: 10.23.27.63
+  machine: 
+    name: 129.59
+#debug: true
+
+logging:
+  config: config/log4j2-spring.xml

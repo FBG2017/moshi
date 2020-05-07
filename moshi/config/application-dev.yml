@@ -1,0 +1,71 @@
+#server:
+#  port: 10000
+#  servlet:
+#    path: /card
+
+spring:
+    datasource:
+        name: test
+        url: jdbc:db2://10.0.130.101:60000/card:currentSchema=CARD3
+        username: carddb2
+        password: carddb2
+        driver-class-name: com.ibm.db2.jcc.DB2Driver
+        hikari:
+            auto-commit: true             # 默认true, 自动提交事务
+            read-only: false              #
+            connection-timeout: 60000     # 连接超时时间，如果在没有连接可用的情况下等待超过时间，则抛出SQLException
+            idle-timeout: 60000           # 空闲超时时间ms，数值0表示空闲连接永不从池中删除
+            validation-timeout: 3000      # 用来指定验证连接有效性的超时时间（默认5s，最小不能小于250ms）
+            max-lifetime: 0               # 连接池中的连接的最长生命周期ms，数值0表示不限制
+            minimum-idle: 50              # 最小连接数
+            maximum-pool-size: 100        # 连接池最大连接数
+            pool-name: Card3HikariCP      # 连接池名称，主要用于显示在日志记录和JMX管理控制台中 
+    main:
+      allow-bean-definition-overriding: true
+
+mybatis:
+#  mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+#  mapper-locations: com.wk.card.dao  #注意：一定要对应mapper映射xml文件的所在路径
+#  type-aliases-package: com.wk.card.esb.db.info  # 注意：对应实体类的路径
+#  type-aliases-package: com.wk.card  # 注意：对应实体类的路径
+  configuration:
+    map-underscore-to-camel-case: true
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+system: 
+#  name: aip
+#  ip: 10.23.27.63
+  machine: 
+    name: feihl
+#debug: true
+
+logging:
+  config: config/log4j2-spring.xml
+#  level:
+#    com.wk: INFO
+#ibm: 
+#  mq: 
+#    client: 
+#      host: 10.0.110.152
+#      ccsid: 1208
+#      recv: 
+##        queue-name: IBM.SERVICE.CARD.REQUESTER.IN
+#        queue-name: IBM.SERVICE.CARD.REQUESTER.OUT
+#      send: 
+#        queue-name: IBM.SERVICE.CARD.REQUESTER.OUT
+#      queue-manager: MQ_Transaction_Server
+#      channel: SVRCONN_GW_IN
+#      port: 40000
+#      receive-timeout: 20000
+#      session-cache-size: 500
+#    server: 
+#      host: 10.0.110.152
+#      ccsid: 1208
+#      recv: 
+#        queue-name: IBM.SERVICE.CARD.PROVIDER.IN
+#      send: 
+#        queue-name: IBM.SERVICE.CARD.PROVIDER.OUT
+#      queue-manager: MQ_Transaction_Server
+#      channel: SVRCONN_GW_IN
+#      port: 40000
+#      receive-timeout: 20000
+#      session-cache-size: 500

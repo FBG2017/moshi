@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    格式化参数说明： 
+    %d: 日期格式,默认yyyy-MM-dd hh:mm:ss,SSS,也可以%d{hh:mm:ss,SSS} 
+    %p: ALL,TRACE, INFO, INFO, WARN, ERROR ,FATAL,OFF 
+    %t: 线程名 
+    %m: 信息 
+    %n: 换行 
+    %C=%class: class 
+    %M=%method: 方法名 
+    %F=%file : 文件 
+    %l=%location: 
+    %L=%line:行号 
+-->
+    
+<!-- monitorInterval 每30秒检查1次配置文件是否有改变 -->
+<Configuration status="OFF" name="TasksConfig" monitorInterval="30">
+    <!-- 定义一些常量 -->
+    <properties>
+        <property name="LOG_HOME">./log</property>
+        <property name="LOG_BK_HOME">./log/bk</property>
+        <property name="LOG_PATTERN">%d{MM-dd HH:mm:ss.SSS} [%t] [%p] [%C.%M] - %m%n%ex</property>
+        <property name="LOG_GZ">.gz</property>
+        <property name="LOG_FILE_SIZE">512MB</property>
+        <property name="LOG_FILE_NUMS">7</property>
+        <property name="LOG_DAYS">30d</property>
+    </properties>
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 控制台只输出level及以上级别的信息 
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            -->
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+        </Console>
+        <!-- ab交易日志 -->
+        <RollingFile name="card" fileName="${LOG_HOME}/ab.log"
+            filePattern="${LOG_BK_HOME}/ab_%d{yyyy-MM-dd}_%i.log${LOG_GZ}">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <!-- 控制台只输出level及以上级别的信息 
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            -->
+            <!-- 日志分割策略 -->
+            <Policies>
+                <!-- 按时间间隔归档 (以文件名日期格式为单位) -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <!-- 文件大小滚动策略，日志达到size时归档 ,注意配置%i 从1开始递增 -->
+                <SizeBasedTriggeringPolicy size="${LOG_FILE_SIZE}" />
+            </Policies>
+            <!-- 删除旧的日志文件, 默认对多7个文件，超过则会覆盖以前的文件 -->
+            <DefaultRolloverStrategy max="${LOG_FILE_NUMS}">
+                <!-- 自动删除历史压缩日志文件 -->
+                <Delete basePath="${LOG_BK_HOME}/" maxDepth="2">
+                    <IfFileName glob="ab_*.log${LOG_GZ}" />
+                    <!-- 日期根据：filePattern一致，如果是H，这里就填H，如果是d,这里就填d, 180天 -->
+                    <IfLastModified age="${LOG_DAYS}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- 系统日志 -->
+        <RollingFile name="spring"
+            fileName="${LOG_HOME}/ab_system.log"
+            filePattern="${LOG_BK_HOME}/ab_system_%d{yyyy-MM-dd}_%i.log${LOG_GZ}">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <!-- 控制台只输出level及以上级别的信息 
+           <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            -->
+            <!-- 日志分割策略 -->
+            <Policies>
+                <!-- 按时间间隔归档 (以文件名日期格式为单位) -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <!-- 日志达到size时归档 ,注意配置%i 从1开始递增 -->
+                <SizeBasedTriggeringPolicy size="${LOG_FILE_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy compressionLevel="0" max="${LOG_FILE_NUMS}"  >
+                <!-- 自动删除历史压缩日志文件 -->
+                <Delete basePath="${LOG_BK_HOME}/" maxDepth="2">
+                    <IfFileName glob="ab_system_*.log${LOG_GZ}" />
+                    <!-- 日期根据：filePattern一致，如果是H，这里就填H，如果是d,这里就填d, 180天 -->
+                    <IfLastModified age="${LOG_DAYS}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+
+    <!-- 定义Loggers，只有定义了logger并引入appender，appender才会生效 -->
+    <Loggers>
+        <!-- additivity=true 的意思是会在控制台也输入一份 -->
+        <Logger name="com.wk.card" level="INFO" additivity="false">
+            <AppenderRef ref="card" />
+        </Logger>
+        <Logger name="io.netty" level="INFO" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Logger name="com.zaxxer.hikari" level="INFO"
+            additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Logger name="com.wk.vland" level="INFO" additivity="false">
+            <AppenderRef ref="spring" />
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="spring" />
+        </Root>
+    </Loggers>
+
+</Configuration>
